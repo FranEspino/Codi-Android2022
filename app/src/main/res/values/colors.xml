@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryColor">#DAEFF2</color>
+    <color name="codiBlue">#223052</color>
+
+    <color name="statusbar">#415C89</color>
+    <color name="codiCyan">#49B9B3</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>

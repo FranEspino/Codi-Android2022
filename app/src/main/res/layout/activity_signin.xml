@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryColor"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".SignInActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="40dp"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/logo"
+                    />
+                <EditText
+                    android:layout_marginTop="40dp"
+                    android:id="@+id/dni_user"
+                    android:drawablePadding="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#000"
+                    android:drawableLeft="@drawable/ic_dni"
+                    android:hint="Ingresa tu dni"
+                    android:inputType="number"
+                    android:textColor="#000"
+                    android:drawableTint="@color/codiBlue"
+                    android:textColorHint="#000" />
+
+                <EditText
+                    android:id="@+id/clave_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="#000"
+                    android:drawableLeft="@drawable/ic_clave"
+                    android:drawablePadding="8dp"
+                    android:hint="Ingresa tu clave"
+                    android:inputType="textPassword"
+                    android:drawableTint="@color/codiBlue"
+                    android:textColor="#000"
+                    android:textColorHint="#000"
+                    />
+
+                <Button
+                    android:id="@+id/btn_login"
+                    android:fontFamily="@font/poppinsbold"
+                    android:layout_marginTop="24dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ingresar "
+                    android:textSize="18dp"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:background="@drawable/btn_blue"
+                    android:clickable="true" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¿No tienes cuenta? Registrate"
+                        android:textStyle="italic"
+                        android:textSize="12dp"
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:layout_marginTop="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_createAccount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aquí"
+                        android:layout_marginLeft="8dp"
+                        android:textStyle="bold"
+                        android:textSize="12dp"
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:clickable="true"
+                        />
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/response_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginLeft="8dp"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    />
+
+            </LinearLayout>
+
+
+
+        </ScrollView>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

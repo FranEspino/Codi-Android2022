@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryColor"
+    android:orientation="vertical"
+    tools:context=".PermissionFineLocationActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:gravity="center"
+        >
+    <TextView
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:text="Hey Codi Pasajero! Necesitamos que otorges los permisos de ubicacion"
+        android:textColor="#223052"
+        android:textSize="17dp"
+        android:textAlignment="center"
+        android:fontFamily="@font/poppinsbold"
+        />
+
+
+    <ImageView
+        android:layout_marginTop="30dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/location"
+        />
+
+    <Button
+        android:id="@+id/btn_finelocation"
+        android:layout_margin="50dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Permitir "
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:background="@drawable/btn_blue"
+        android:textColor="@color/white"
+        android:paddingLeft="15dp"
+        android:drawableLeft="@drawable/ic_ubication"
+        />
+    </LinearLayout>
+</LinearLayout>

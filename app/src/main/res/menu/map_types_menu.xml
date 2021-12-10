@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/search"
+        android:title="Search"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/map_light"
+        android:title="@string/map_light"
+        app:showAsAction="never" />
+    <item android:id="@+id/map_dark"
+        android:title="@string/map_dark"
+        app:showAsAction="never" />
+    <item android:id="@+id/map_stand"
+        android:title="@string/map_stand"
+        app:showAsAction="never" />
+    <item android:id="@+id/map_retro"
+        android:title="@string/map_retro"
+        app:showAsAction="never" />
+</menu>

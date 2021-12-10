@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryColor"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="35dp"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"
+    />
+    <Button
+        android:id="@+id/btn_register"
+        android:gravity="center"
+        android:fontFamily="@font/poppinsbold"
+        android:layout_marginTop="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Soy un usuario nuevo"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:background="@drawable/btn_blue"
+        android:clickable="true"
+        android:textAllCaps="false"
+        android:textSize="18dp"
+        />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:fontFamily="@font/poppinsbold"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ya estoy registrado"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:clickable="true"
+        android:background="@drawable/btn_cyan"
+        android:textAllCaps="false"
+        android:textSize="18dp"
+        />
+
+</LinearLayout>
