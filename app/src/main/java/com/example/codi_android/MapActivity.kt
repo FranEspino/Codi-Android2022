@@ -12,21 +12,18 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import android.content.Intent
-import android.graphics.Camera
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
-import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat
+import androidx.lifecycle.MutableLiveData
 
 import com.example.codi_android.adapters.AdapterInfoWindow
 import com.example.codi_android.helpers.PlacesHelper
@@ -57,9 +54,11 @@ class MapActivity : AppCompatActivity()  , OnMapReadyCallback, GoogleMap.OnMyLoc
     private lateinit var map:GoogleMap
     private lateinit var destinationMarker: Marker
 
+    private var startTime = 0L
+    private var stopTime = 0L
 
     private var locationList = mutableListOf<LatLng>()
-
+     val started = MutableLiveData(false)
     private val helpersMap by lazy { HelpersMap() }
     private val helperPolyline by lazy {PolylineHelper()}
 
@@ -75,23 +74,24 @@ class MapActivity : AppCompatActivity()  , OnMapReadyCallback, GoogleMap.OnMyLoc
     private lateinit var direccion: List<Address>
     private lateinit var fat_waze: FloatingActionButton
     private lateinit var fat_googlemap: FloatingActionButton
+    private lateinit var fab_travel: FloatingActionButton
+    private lateinit var fab_pause: FloatingActionButton
+
 
     companion object{
         const val REQUEST_CODE_LOCATION = 0
         const  val  ACTIVITY_SERVICE_START = "ACTION_SERVICE_START"
+        const  val  ACTIVITY_SERVICE_STOP = "ACTION_SERVICE_STOP"
 
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        //Iniciamos las inyecciones
-        sendActionCommandService(ACTIVITY_SERVICE_START)
-
         MyToolbar().showToolbar(this, "¿A donde quieres ir?", false)
         window.statusBarColor = ContextCompat.getColor(this, R.color.statusbar)
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         container_toolbar = findViewById(R.id.container_toolbar)
 
@@ -100,6 +100,26 @@ class MapActivity : AppCompatActivity()  , OnMapReadyCallback, GoogleMap.OnMyLoc
 
         fat_waze = findViewById(R.id.fab_waze)
         fat_googlemap = findViewById(R.id.fab_googlemaps)
+        fab_travel = findViewById(R.id.fab_travel)
+        fab_pause = findViewById(R.id.fab_pause)
+        fab_pause.visibility =  View.INVISIBLE
+
+        fab_pause.setOnClickListener{
+            sendActionCommandService(ACTIVITY_SERVICE_STOP)
+
+
+            fab_pause.visibility =  View.INVISIBLE
+            fab_travel.visibility =  View.VISIBLE
+
+        }
+
+        fab_travel.setOnClickListener{
+            //Iniciamos las inyecciones
+            sendActionCommandService(ACTIVITY_SERVICE_START)
+            fab_pause.visibility =  View.VISIBLE
+            fab_travel.visibility =  View.INVISIBLE
+
+        }
 
         fat_googlemap.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://maps.google.com/?q=${currentDestination.latitude},${currentDestination.longitude}"))
@@ -109,7 +129,6 @@ class MapActivity : AppCompatActivity()  , OnMapReadyCallback, GoogleMap.OnMyLoc
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://waze.com/ul?q=66%20Acacia%20Avenue&ll=${currentDestination.latitude},${currentDestination.longitude}&navigate=yes"))
             startActivity(intent)
         }
-
 
     }
 
@@ -136,6 +155,8 @@ class MapActivity : AppCompatActivity()  , OnMapReadyCallback, GoogleMap.OnMyLoc
 
     }
 
+
+
     private fun observedTrackerService(){
         TrackerService.locationList.observe(this,{
             if(it!=null){
@@ -144,6 +165,29 @@ class MapActivity : AppCompatActivity()  , OnMapReadyCallback, GoogleMap.OnMyLoc
                 followPoline()
             }
         })
+        TrackerService.started.observe(this,{
+            started.value  = it
+        })
+
+        TrackerService.startTime.observe(this,{
+            startTime = it
+        })
+        TrackerService.stopTime.observe(this,{
+            stopTime = it
+            if(stopTime!=0L){
+                //Animar all el trayecto que recoriio
+                val bounds = LatLngBounds.Builder()
+                for(location in locationList){
+                    bounds.include(location)
+                }
+                map.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(
+                        bounds.build(),100
+                    ),2000, null
+                )
+            }
+        })
+
     }
     private fun drawPolyLine(){
         val polyline = map.addPolyline(
@@ -170,7 +214,6 @@ class MapActivity : AppCompatActivity()  , OnMapReadyCallback, GoogleMap.OnMyLoc
         }
     }
     private fun sendActionCommandService(action:String){
-
 
         Intent(
             getApplicationContext(),

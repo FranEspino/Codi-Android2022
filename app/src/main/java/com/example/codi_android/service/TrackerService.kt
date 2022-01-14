@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.ContentProvider
+import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Build
@@ -13,6 +14,8 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
+import com.example.codi_android.objects.MapUtil
+import com.example.codi_android.objects.MapUtil.calculateTheDistance
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +31,11 @@ class TrackerService:LifecycleService() {
 
     private lateinit var fusedfLocationProviderClient: FusedLocationProviderClient
     companion object {
+
+
+        val startTime = MutableLiveData<Long>()
+        val stopTime = MutableLiveData<Long>()
+
         const val ACTION_SERVICE_START = "ACTION_SERVICE_START"
         const val ACTION_SERVICE_STOP = "ACTION_SERVICE_STOP"
         val started = MutableLiveData<Boolean>()
@@ -49,6 +57,7 @@ class TrackerService:LifecycleService() {
                 for(location in locations){
 
                     updateLocationList(location)
+                    updateNotificationPeriodically()
                 }
 
             }
@@ -59,7 +68,8 @@ class TrackerService:LifecycleService() {
     private fun setInitialValues(){
         started.postValue(false)
         locationList.postValue((mutableListOf()))
-
+        startTime.postValue(0L)
+        stopTime.postValue(0L)
 
     }
 
@@ -96,6 +106,7 @@ class TrackerService:LifecycleService() {
                 }
                 ACTION_SERVICE_STOP  ->{
                     started.postValue(false)
+                    stopForegroundService()
                 }
                 else  -> {}
             }
@@ -106,8 +117,11 @@ class TrackerService:LifecycleService() {
     private fun startForegroundService(){
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, notification.build())
-
     }
+
+
+
+
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates(){
         val locationRequest = LocationRequest().apply {
@@ -121,7 +135,21 @@ class TrackerService:LifecycleService() {
             locationCallback,
             Looper.getMainLooper()
         )
+
+        startTime.postValue(System.currentTimeMillis())
     }
+    private fun stopForegroundService(){
+        fusedfLocationProviderClient.removeLocationUpdates(locationCallback)
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(
+            NOTIFICATION_ID,
+
+            )
+        stopForeground(true)
+        stopSelf()
+        stopTime.postValue(System.currentTimeMillis())
+
+    }
+
 
     private fun createNotificationChannel(){
         if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
@@ -132,6 +160,14 @@ class TrackerService:LifecycleService() {
             )
             notificationManager.createNotificationChannel(channel)
         }
+    }
+
+    private fun  updateNotificationPeriodically(){
+        notification.apply {
+            setContentTitle( "Distanica recorrida: ")
+            setContentText(locationList.value?.let {calculateTheDistance(it) }+"Km ")
+        }
+        notificationManager.notify(NOTIFICATION_ID,notification.build())
     }
 
 
